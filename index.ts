@@ -101,6 +101,7 @@ export class Spoiler extends base.Component<SpoilerOptions> {
 
   protected _onHeadClick(e: Event): void {
     this.toggle();
+    e.preventDefault();
   }
 }
 
