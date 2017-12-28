@@ -105,6 +105,19 @@ describe("Spoiler", function () {
     expect(spoiler.toggle()).to.be.false;
     expect(spoiler.opened).to.be.false;
   });
+
+  it('should sync text', function () {
+    init(`<div class="js-spoiler" id="spoiler">
+      <button class="js-spoiler__head" id="spoiler-head" data-spoiler-opened-text="Opened" data-spoiler-closed-text="Closed"></button>
+      <div class="js-spoiler__body"></div>
+    </div>`);
+
+    let spoiler = SpoilerFactory.createComp(Spoiler, elem('spoiler'));
+    expect(spoiler.opened).to.be.false;
+    expect(elem('spoiler-head').textContent).to.be.equal('Closed');
+    spoiler.setOpened(true);
+    expect(elem('spoiler-head').textContent).to.be.equal('Opened');
+  });
 });
 
 describe("SpoilerGroup", function () {

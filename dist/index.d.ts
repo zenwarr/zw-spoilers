@@ -7,6 +7,8 @@ export interface SpoilerOptions extends base.ComponentOptions {
     initedClass?: string;
     beforeChangeStateEvent?: string;
     afterChangeStateEvent?: string;
+    openedTextAttr: string;
+    closedTextAttr: string;
 }
 export declare const DefaultOptions: SpoilerOptions;
 export interface SpoilerChangeStateEvent extends CustomEvent {
@@ -22,6 +24,7 @@ export declare class Spoiler extends base.Component<SpoilerOptions> {
     /** Protected area **/
     protected _isOpened: boolean;
     protected _onHeadClick(e: Event): void;
+    protected _syncText(): void;
 }
 export interface SpoilerGroupOptions extends base.ComponentOptions {
     spoilerRootSelector?: string;

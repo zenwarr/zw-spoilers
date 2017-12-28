@@ -74,6 +74,17 @@ The same can be done with `defaultOpenedIndex` property of options object.
 Attributes always have priority over options.
 If this index is negative (or just invalid), no spoilers will be opened.
 
+You can dynamically display different text content for any elements inside spoiler depending on whether spoiler is opened or closed:
+
+```html
+<div class="js-spoiler">
+  <button class="js-spoiler__head" data-spoiler-opened-text="Opened" data-spoiler-closed-text="Closed"></button>
+  <div class="js-spoiler__body"></div>
+</div>
+```
+
+Here button will display "Closed" when spoiler is closed and "Opened" when spoiler is opened.
+
 ## Events
 
 Some events are fired on root element of the component.

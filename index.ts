@@ -8,6 +8,8 @@ export interface SpoilerOptions extends base.ComponentOptions {
   initedClass?: string;
   beforeChangeStateEvent?: string;
   afterChangeStateEvent?: string;
+  openedTextAttr: string;
+  closedTextAttr: string;
 }
 
 export const DefaultOptions: SpoilerOptions = {
@@ -19,6 +21,8 @@ export const DefaultOptions: SpoilerOptions = {
   initedClass: 'js-spoiler--inited',
   beforeChangeStateEvent: 'before-spoiler-change-state',
   afterChangeStateEvent: 'after-spoiler-change-state',
+  openedTextAttr: 'data-spoiler-opened-text',
+  closedTextAttr: 'data-spoiler-closed-text'
 };
 
 export interface SpoilerChangeStateEvent extends CustomEvent {
@@ -45,6 +49,8 @@ export class Spoiler extends base.Component<SpoilerOptions> {
     if (this.options.initedClass) {
       this.root.classList.add(this.options.initedClass);
     }
+
+    this._syncText();
   }
 
   toggle(): boolean {
@@ -81,6 +87,8 @@ export class Spoiler extends base.Component<SpoilerOptions> {
       this.root.classList.toggle(this.options.closedClass, !this._isOpened);
     }
 
+    this._syncText();
+
     if (this.options.afterChangeStateEvent) {
       let afterEvent = new CustomEvent(this.options.afterChangeStateEvent, {
         bubbles: true,
@@ -102,6 +110,23 @@ export class Spoiler extends base.Component<SpoilerOptions> {
   protected _onHeadClick(e: Event): void {
     this.toggle();
     e.preventDefault();
+  }
+
+  protected _syncText() {
+    const setText = (attr: string) => {
+      let elements = this.root.querySelectorAll(`[${attr}]`);
+      for (let q = 0; q < elements.length; ++q) {
+        elements[q].textContent = elements[q].getAttribute(attr);
+      }
+    };
+
+    if (this.options.openedTextAttr && this.opened) {
+      setText(this.options.openedTextAttr);
+    }
+
+    if (this.options.closedTextAttr && !this.opened) {
+      setText(this.options.closedTextAttr);
+    }
   }
 }
 
