@@ -65,7 +65,7 @@ To create spoiler group, insert the following markup:
 The only purpose for spoiler group to exists is to manage opened/closed state of its children spoilers.
 If spoiler group is _exclusive_, it allows only one spoiler to be opened at the same time.
 By default, spoiler groups are not exclusive.
-You should either add `data-spoiler-group-exclusive` attribute to root element, of set `defaultExclusive` property of options object to `true` to make it exclusive (see @zcomp/base documentation for details).
+You should either add `data-spoiler-group-exclusive` attribute to root element, of set `defaultExclusive` property of options object to `true` to make it exclusive (you can use `data-spoiler-group-exclusive="false"` in this case to make a component non-exclusive).
 If spoiler is exclusive, and you have several initially opened spoilers inside, only the first one will remain opened after initializing, others will be closed.
 If you have no initially opened spoilers, all spoilers will be closed after group initializes.
 But you can force a spoiler with particular index inside a group to be opened initially by adding `data-spoiler-group-opened-index` to the root element.

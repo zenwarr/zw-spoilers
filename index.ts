@@ -128,7 +128,7 @@ export class SpoilerGroup extends base.Component<SpoilerGroupOptions> {
   constructor(root: Element, options: SpoilerGroupOptions) {
     super(root, options);
 
-    if ((this.options.exclusiveAttr && this.root.hasAttribute(this.options.exclusiveAttr)) || this.options.defaultExclusive) {
+    if (base.checkBinaryOptionAttr(this.root, this.options.exclusiveAttr, this.options.defaultExclusive || false)) {
       this._exclusive = true;
     }
 
