@@ -36,18 +36,19 @@ HTML markup:
 </div>
 ```
 
-The library does not actually hides body, it just adds classes on root element.
+The library does not actually hides body, it just adds classes to elements.
 You should manually add styles to your css files to hide body element.
 For example:
 
 ```css
-.js-spoiler--closed .js-spoiler__body {
+.js-spoiler__body--closed {
   display: none;
 }
 ```
 
 When spoiler is opened, root element has `js-spoiler--opened` class.
 When it is closed, `js-spoiler--closed` class is added.
+Body can have `js-spoiler__body--opened` and `js-spoiler__body--closed`, and head — `js-spoiler__head--opened` and `js-spoiler__head--closed` classes.
 After spoiler component initialized, `js-spoiler--inited` class will be present on root element.
 
 You can make spoiler to be opened initially just by adding `js-spoiler--opened` class in HTML.
