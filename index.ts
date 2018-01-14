@@ -6,6 +6,10 @@ export interface SpoilerOptions extends base.ComponentOptions {
   openedClass?: string;
   closedClass?: string;
   initedClass?: string;
+  headOpenedClass?: string;
+  headClosedClass?: string;
+  bodyOpenedClass?: string;
+  bodyClosedClass?: string;
   beforeChangeStateEvent?: string;
   afterChangeStateEvent?: string;
   openedTextAttr: string;
@@ -19,6 +23,10 @@ export const DefaultOptions: SpoilerOptions = {
   openedClass: 'js-spoiler--opened',
   closedClass: 'js-spoiler--closed',
   initedClass: 'js-spoiler--inited',
+  headOpenedClass: 'js-spoiler__head--opened',
+  headClosedClass: 'js-spoiler__head--closed',
+  bodyOpenedClass: 'js-spoiler__body--opened',
+  bodyClosedClass: 'js-spoiler__body--closed',
   beforeChangeStateEvent: 'before-spoiler-change-state',
   afterChangeStateEvent: 'after-spoiler-change-state',
   openedTextAttr: 'data-spoiler-opened-text',
@@ -42,8 +50,8 @@ export class Spoiler extends base.Component<SpoilerOptions> {
 
     if (this.options.openedClass && this.root.classList.contains(this.options.openedClass)) {
       this.setOpened(true);
-    } else if (this.options.closedClass) {
-      this.root.classList.add(this.options.closedClass);
+    } else {
+      this._syncClasses();
     }
 
     if (this.options.initedClass) {
@@ -80,13 +88,8 @@ export class Spoiler extends base.Component<SpoilerOptions> {
     }
 
     this._isOpened = value;
-    if (this.options.openedClass) {
-      this.root.classList.toggle(this.options.openedClass, this._isOpened);
-    }
-    if (this.options.closedClass) {
-      this.root.classList.toggle(this.options.closedClass, !this._isOpened);
-    }
 
+    this._syncClasses();
     this._syncText();
 
     if (this.options.afterChangeStateEvent) {
@@ -112,12 +115,11 @@ export class Spoiler extends base.Component<SpoilerOptions> {
     e.preventDefault();
   }
 
-  protected _syncText() {
+  protected _syncText(): void {
     const setText = (attr: string) => {
-      let elements = this.root.querySelectorAll(`[${attr}]`);
-      for (let q = 0; q < elements.length; ++q) {
-        elements[q].textContent = elements[q].getAttribute(attr);
-      }
+      this._each(`[${attr}]`, elem => {
+        elem.textContent = elem.getAttribute(attr);
+      });
     };
 
     if (this.options.openedTextAttr && this.opened) {
@@ -126,6 +128,31 @@ export class Spoiler extends base.Component<SpoilerOptions> {
 
     if (this.options.closedTextAttr && !this.opened) {
       setText(this.options.closedTextAttr);
+    }
+  }
+
+  protected _syncClasses() {
+    const setClasses = (selector: string, openedClass?: string, closedClass?: string) => {
+      this._each(selector, elem => {
+        elem.classList.toggle(openedClass || '', this._isOpened);
+        elem.classList.toggle(closedClass || '', !this._isOpened);
+      });
+    };
+
+    if (this.options.headSelector) {
+      setClasses(this.options.headSelector, this.options.headOpenedClass, this.options.headClosedClass);
+    }
+
+    if (this.options.bodySelector) {
+      setClasses(this.options.bodySelector, this.options.bodyOpenedClass, this.options.bodyClosedClass);
+    }
+
+    if (this.options.openedClass) {
+      this.root.classList.toggle(this.options.openedClass, this._isOpened);
+    }
+
+    if (this.options.closedClass) {
+      this.root.classList.toggle(this.options.closedClass, !this._isOpened);
     }
   }
 }

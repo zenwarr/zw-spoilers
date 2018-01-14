@@ -65,15 +65,27 @@ describe("Spoiler", function () {
   it('should open spoiler on click', function () {
     init(`<div class="js-spoiler" id="spoiler">
       <button class="js-spoiler__head" id="spoiler-head"></button>
-      <div class="js-spoiler__body"></div>
+      <div class="js-spoiler__body" id="spoiler-body"></div>
     </div>`);
 
     let spoiler = SpoilerFactory.createComp(Spoiler, elem('spoiler'));
     expect(spoiler.opened).to.be.false;
     sendEvent('spoiler-head', 'click');
     expect(spoiler.opened).to.be.true;
-    expect(elem('spoiler').classList.contains('js-spoiler--closed')).to.be.false;
     expect(elem('spoiler').classList.contains('js-spoiler--opened')).to.be.true;
+    expect(elem('spoiler').classList.contains('js-spoiler--closed')).to.be.false;
+    expect(elem('spoiler-head').classList.contains('js-spoiler__head--opened')).to.be.true;
+    expect(elem('spoiler-body').classList.contains('js-spoiler__body--opened')).to.be.true;
+    expect(elem('spoiler-head').classList.contains('js-spoiler__head--closed')).to.be.false;
+    expect(elem('spoiler-body').classList.contains('js-spoiler__body--closed')).to.be.false;
+
+    sendEvent('spoiler-head', 'click');
+    expect(elem('spoiler').classList.contains('js-spoiler--opened')).to.be.false;
+    expect(elem('spoiler').classList.contains('js-spoiler--closed')).to.be.true;
+    expect(elem('spoiler-head').classList.contains('js-spoiler__head--opened')).to.be.false;
+    expect(elem('spoiler-body').classList.contains('js-spoiler__body--opened')).to.be.false;
+    expect(elem('spoiler-head').classList.contains('js-spoiler__head--closed')).to.be.true;
+    expect(elem('spoiler-body').classList.contains('js-spoiler__body--closed')).to.be.true;
   });
 
   it('should fire events', function () {
@@ -117,6 +129,24 @@ describe("Spoiler", function () {
     expect(elem('spoiler-head').textContent).to.be.equal('Closed');
     spoiler.setOpened(true);
     expect(elem('spoiler-head').textContent).to.be.equal('Opened');
+  });
+
+  it('should handle nested spoilers', function () {
+    init(`<div class="js-spoiler" id="spoiler">
+      <button class="js-spoiler__head" id="spoiler-head"></button>
+      <div class="js-spoiler__body">
+        <div class="js-spoiler" id="spoiler-nested">
+          <button class="js-spoiler__head" id="spoiler-nested-head"></button>
+          <div class="js-spoiler__body"></div>
+        </div>      
+      </div>
+    </div>`);
+
+    SpoilerFactory.init();
+    let spoiler = SpoilerFactory.fromRoot(elem('spoiler')) as Spoiler;
+    spoiler.setOpened(true);
+    expect(elem('spoiler-head').classList.contains('js-spoiler__head--opened')).to.be.true;
+    expect(elem('spoiler-nested-head').classList.contains('js-spoiler__head--opened')).to.be.false;
   });
 });
 

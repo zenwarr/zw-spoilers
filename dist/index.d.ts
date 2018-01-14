@@ -5,6 +5,10 @@ export interface SpoilerOptions extends base.ComponentOptions {
     openedClass?: string;
     closedClass?: string;
     initedClass?: string;
+    headOpenedClass?: string;
+    headClosedClass?: string;
+    bodyOpenedClass?: string;
+    bodyClosedClass?: string;
     beforeChangeStateEvent?: string;
     afterChangeStateEvent?: string;
     openedTextAttr: string;
@@ -25,6 +29,7 @@ export declare class Spoiler extends base.Component<SpoilerOptions> {
     protected _isOpened: boolean;
     protected _onHeadClick(e: Event): void;
     protected _syncText(): void;
+    protected _syncClasses(): void;
 }
 export interface SpoilerGroupOptions extends base.ComponentOptions {
     spoilerRootSelector?: string;
